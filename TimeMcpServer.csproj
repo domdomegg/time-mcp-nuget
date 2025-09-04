@@ -22,8 +22,6 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>time-mcp-server</ToolCommandName>
     
-    <!-- MCP Registry Validation -->
-    <PackageMcpName>io.github.domdomegg/time-mcp-server</PackageMcpName>
   </PropertyGroup>
 
   <ItemGroup>
