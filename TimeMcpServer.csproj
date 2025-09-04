@@ -16,18 +16,23 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>mcp;model-context-protocol;time;utc;timestamp</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     
     <!-- .NET Tool Configuration -->
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>time-mcp-server</ToolCommandName>
     
     <!-- MCP Registry Validation -->
-    <mcp-name>io.github.domdomegg/time-mcp-server</mcp-name>
+    <PackageMcpName>io.github.domdomegg/time-mcp-server</PackageMcpName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
