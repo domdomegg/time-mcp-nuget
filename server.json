@@ -11,7 +11,7 @@
   "packages": [
     {
       "registry_name": "nuget",
-      "name": "TimeMcpServer",
+      "identifier": "TimeMcpServer",
       "version": "{{VERSION}}",
       "runtime_hint": "dnx"
     }
