@@ -84,4 +84,4 @@ The project includes GitHub Actions workflows for:
 - **Build & Test** - Builds and tests on multiple platforms (Windows, macOS, Linux)  
 - **Publish** - Automatically publishes to NuGet and creates GitHub releases on version tags
 
-<!-- mcp-name: io.github.domdomegg/time-mcp-server -->
+<!-- mcp-name: io.github.domdomegg/time-mcp-nuget -->
