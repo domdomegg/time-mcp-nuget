@@ -80,6 +80,25 @@ jobs:
       - name: Publish to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
 
+      - name: Wait for NuGet package availability
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          MAX_ATTEMPTS=60
+          SLEEP_SECONDS=10
+          
+          echo "Waiting for package to be indexed on NuGet..."
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            if curl -s -f "https://api.nuget.org/v3-flatcontainer/timemcpserver/$VERSION/readme" > /dev/null 2>&1; then
+              echo "Package is now indexed on NuGet!"
+              exit 0
+            fi
+            echo "Attempt $i/$MAX_ATTEMPTS: Package not yet indexed, waiting ${SLEEP_SECONDS}s..."
+            sleep $SLEEP_SECONDS
+          done
+
+          echo "Package did not become indexed after $MAX_ATTEMPTS attempts"
+          exit 1
+
       - name: Install mcp-publisher
         run: curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.0.0/mcp-publisher_1.0.0_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
       
