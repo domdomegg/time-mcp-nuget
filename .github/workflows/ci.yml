@@ -80,18 +80,6 @@ jobs:
       - name: Publish to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
 
-      - name: Wait for NuGet propagation
-        run: |
-          echo "Waiting for NuGet package to propagate..."
-          for i in {1..30}; do
-            if curl -s "https://api.nuget.org/v3/registration5-gz-semver2/timemcpserver/${{ steps.version.outputs.VERSION }}.json" | grep -q "${{ steps.version.outputs.VERSION }}"; then
-              echo "Package found on NuGet!"
-              break
-            fi
-            echo "Attempt $i/30: Package not yet available, waiting 30 seconds..."
-            sleep 30
-          done
-
       - name: Install mcp-publisher
         run: |
           curl -L https://github.com/modelcontextprotocol/publisher/releases/latest/download/mcp-publisher-linux-x64.tar.gz | tar xz
