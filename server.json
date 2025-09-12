@@ -10,10 +10,11 @@
   },
   "packages": [
     {
-      "registry_name": "nuget",
+      "registry_type": "nuget",
       "identifier": "TimeMcpServer",
       "version": "{{VERSION}}",
-      "runtime_hint": "dnx"
+      "runtime_hint": "dnx",
+      "transport": {"type": "stdio"}
     }
   ]
 }
