@@ -1,20 +1,17 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.domdomegg/time-mcp-nuget",
-  "version": "{{VERSION}}",
+  "title": "Time MCP Server",
   "description": "Get the current UTC time in RFC 3339 format.",
-  "status": "active",
-  "repository": {
-    "url": "https://github.com/domdomegg/time-mcp-nuget.git",
-    "source": "github"
-  },
+  "version": "{{VERSION}}",
   "packages": [
     {
-      "registry_type": "nuget",
+      "registryType": "nuget",
       "identifier": "TimeMcpServer",
       "version": "{{VERSION}}",
-      "runtime_hint": "dnx",
-      "transport": {"type": "stdio"}
+      "transport": {
+        "type": "stdio"
+      }
     }
   ]
 }

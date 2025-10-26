@@ -85,7 +85,7 @@ jobs:
           VERSION=${{ steps.version.outputs.VERSION }}
           MAX_ATTEMPTS=60
           SLEEP_SECONDS=10
-          
+
           echo "Waiting for package to be indexed on NuGet..."
           for i in $(seq 1 $MAX_ATTEMPTS); do
             if curl -s -f "https://api.nuget.org/v3-flatcontainer/timemcpserver/$VERSION/readme" > /dev/null 2>&1; then
@@ -101,10 +101,10 @@ jobs:
 
       - name: Install mcp-publisher
         run: curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.0.0/mcp-publisher_1.0.0_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
-      
+
       - name: Login to MCP Registry
         run: ./mcp-publisher login github-oidc
-      
+
       - name: Publish to MCP Registry
         run: ./mcp-publisher publish
 
