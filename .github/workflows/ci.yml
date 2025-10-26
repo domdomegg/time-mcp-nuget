@@ -80,17 +80,24 @@ jobs:
       - name: Publish to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
 
-      - name: Wait for NuGet propagation
+      - name: Wait for NuGet package README availability
         run: |
-          echo "Waiting for NuGet package to propagate..."
-          for i in {1..30}; do
-            if curl -s "https://api.nuget.org/v3/registration5-gz-semver2/timemcpserver/${{ steps.version.outputs.VERSION }}.json" | grep -q "${{ steps.version.outputs.VERSION }}"; then
-              echo "Package found on NuGet!"
-              break
+          VERSION=${{ steps.version.outputs.VERSION }}
+          MAX_ATTEMPTS=60
+          SLEEP_SECONDS=10
+
+          echo "Waiting for package README to be indexed on NuGet (required for MCP registry verification)..."
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            if curl -s -f "https://api.nuget.org/v3-flatcontainer/timemcpserver/$VERSION/readme" > /dev/null 2>&1; then
+              echo "Package README is now available on NuGet!"
+              exit 0
             fi
-            echo "Attempt $i/30: Package not yet available, waiting 30 seconds..."
-            sleep 30
+            echo "Attempt $i/$MAX_ATTEMPTS: Package README not yet indexed, waiting ${SLEEP_SECONDS}s..."
+            sleep $SLEEP_SECONDS
           done
+
+          echo "Package README did not become available after $MAX_ATTEMPTS attempts"
+          exit 1
 
       - name: Install mcp-publisher
         run: npm install -g @modelcontextprotocol/publisher
