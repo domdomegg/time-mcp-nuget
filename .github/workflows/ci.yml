@@ -72,7 +72,7 @@ jobs:
       - name: Update project version
         run: |
           sed -i "s/<Version>.*<\/Version>/<Version>${{ steps.version.outputs.VERSION }}<\/Version>/" TimeMcpServer.csproj
-          sed -i 's/"version": ".*"/"version": "${{ steps.version.outputs.VERSION }}"/' server.json
+          sed -i 's/\(^[[:space:]]*"version":[[:space:]]*"\){{VERSION}}\(".*\)/\1${{ steps.version.outputs.VERSION }}\2/' server.json
 
       - name: Pack
         run: dotnet pack --configuration Release --output ./artifacts
@@ -92,12 +92,14 @@ jobs:
             sleep 30
           done
 
-      # - name: Install mcp-publisher
-      #   run: # TODO: Install mcp-publisher
-      # - name: Login to MCP Registry
-      #   run: mcp-publisher login github-oidc
-      # - name: Publish to MCP Registry
-      #   run: mcp-publisher publish
+      - name: Install mcp-publisher
+        run: npm install -g @modelcontextprotocol/publisher
+
+      - name: Login to MCP Registry
+        run: mcp-publisher login github-oidc
+
+      - name: Publish to MCP Registry
+        run: mcp-publisher publish
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

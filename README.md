@@ -77,11 +77,18 @@ To publish a new version of the package:
    git push --tags
    ```
 
-Then the CI/CD pipeline will automatically publish the package.
+The CI/CD pipeline will automatically:
+- Publish the NuGet package to nuget.org
+- Publish the server to the MCP Registry
+- Create a GitHub release
 
 ### CI/CD
 The project includes GitHub Actions workflows for:
-- **Build & Test** - Builds and tests on multiple platforms (Windows, macOS, Linux)  
-- **Publish** - Automatically publishes to NuGet and creates GitHub releases on version tags
+- **Build & Test** - Builds and tests on multiple platforms (Windows, macOS, Linux)
+- **Publish** - Automatically publishes to NuGet, MCP Registry, and creates GitHub releases on version tags
+
+### MCP Registry
+
+This server is published to the [Model Context Protocol Registry](https://modelcontextprotocol.io/servers). The publishing process uses the `server.json` configuration file which follows the [MCP Registry specification](https://github.com/modelcontextprotocol/registry).
 
 <!-- mcp-name: io.github.domdomegg/time-mcp-server -->
