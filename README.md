@@ -67,12 +67,13 @@ Once configured, you can use the time tool in Claude Desktop:
 
 To publish a new version of the package:
 
-1. **Tag the release** with a version number prefixed with 'v':
+1. **Update the version in `TimeMcpServer.csproj`**, and commit as `Release x.y.z`
+
+2. **Tag the release** with a version number prefixed with 'v':
    ```bash
    git tag v1.0.1
    ```
-
-2. **Push the tag** to trigger the publishing pipeline:
+3. **Push the tag** to trigger the publishing pipeline:
    ```bash
    git push --tags
    ```
@@ -91,4 +92,4 @@ The project includes GitHub Actions workflows for:
 
 This server is published to the [Model Context Protocol Registry](https://modelcontextprotocol.io/servers). The publishing process uses the `server.json` configuration file which follows the [MCP Registry specification](https://github.com/modelcontextprotocol/registry).
 
-<!-- mcp-name: io.github.domdomegg/time-mcp-server -->
+<!-- mcp-name: io.github.domdomegg/time-mcp-nuget -->

@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "name": "io.github.domdomegg/time-mcp-server",
+  "name": "io.github.domdomegg/time-mcp-nuget",
   "title": "Time MCP Server",
-  "description": "A Model Context Protocol (MCP) server that provides current UTC time in RFC 3339 format. Simple, lightweight tool for getting timestamps in AI applications.",
+  "description": "Get the current UTC time in RFC 3339 format.",
   "version": "{{VERSION}}",
   "packages": [
     {

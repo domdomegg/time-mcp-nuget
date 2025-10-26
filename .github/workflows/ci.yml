@@ -14,12 +14,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        dotnet-version: ['9.x']
+        dotnet-version: ['10.x']
     env:
       CI: true
     steps:
       - name: Checkout ${{ github.sha }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -58,12 +58,12 @@ jobs:
       CI: true
     steps:
       - name: Checkout ${{ github.sha }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.x'
+          dotnet-version: '10.x'
 
       - name: Extract version
         id: version
@@ -72,7 +72,7 @@ jobs:
       - name: Update project version
         run: |
           sed -i "s/<Version>.*<\/Version>/<Version>${{ steps.version.outputs.VERSION }}<\/Version>/" TimeMcpServer.csproj
-          sed -i 's/\(^[[:space:]]*"version":[[:space:]]*"\){{VERSION}}\(".*\)/\1${{ steps.version.outputs.VERSION }}\2/' server.json
+          sed -i 's/{{VERSION}}/${{ steps.version.outputs.VERSION }}/g' server.json
 
       - name: Pack
         run: dotnet pack --configuration Release --output ./artifacts
@@ -80,33 +80,33 @@ jobs:
       - name: Publish to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
 
-      - name: Wait for NuGet package README availability
+      - name: Wait for NuGet package availability
         run: |
           VERSION=${{ steps.version.outputs.VERSION }}
           MAX_ATTEMPTS=60
           SLEEP_SECONDS=10
 
-          echo "Waiting for package README to be indexed on NuGet (required for MCP registry verification)..."
+          echo "Waiting for package to be indexed on NuGet..."
           for i in $(seq 1 $MAX_ATTEMPTS); do
             if curl -s -f "https://api.nuget.org/v3-flatcontainer/timemcpserver/$VERSION/readme" > /dev/null 2>&1; then
-              echo "Package README is now available on NuGet!"
+              echo "Package is now indexed on NuGet!"
               exit 0
             fi
-            echo "Attempt $i/$MAX_ATTEMPTS: Package README not yet indexed, waiting ${SLEEP_SECONDS}s..."
+            echo "Attempt $i/$MAX_ATTEMPTS: Package not yet indexed, waiting ${SLEEP_SECONDS}s..."
             sleep $SLEEP_SECONDS
           done
 
-          echo "Package README did not become available after $MAX_ATTEMPTS attempts"
+          echo "Package did not become indexed after $MAX_ATTEMPTS attempts"
           exit 1
 
       - name: Install mcp-publisher
-        run: npm install -g @modelcontextprotocol/publisher
+        run: curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.0.0/mcp-publisher_1.0.0_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
 
       - name: Login to MCP Registry
-        run: mcp-publisher login github-oidc
+        run: ./mcp-publisher login github-oidc
 
       - name: Publish to MCP Registry
-        run: mcp-publisher publish
+        run: ./mcp-publisher publish
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
