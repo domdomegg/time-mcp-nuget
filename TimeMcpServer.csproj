@@ -9,7 +9,7 @@
     
     <!-- NuGet Package Metadata -->
     <PackageId>TimeMcpServer</PackageId>
-    <Version>1.0.8</Version>
+    <Version>1.1.0</Version>
     <Authors>domdomegg</Authors>
     <Description>A Model Context Protocol (MCP) server that provides current UTC time in RFC 3339 format</Description>
     <PackageProjectUrl>https://github.com/domdomegg/time-mcp-nuget</PackageProjectUrl>
